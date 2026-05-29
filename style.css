@@ -31,7 +31,7 @@ body {
     position: relative;
     width: 450px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     padding: 12px;
 
     background: rgba(20, 20, 20, 0.35);
@@ -76,6 +76,7 @@ body {
     height: 72px;
     border-radius: 12px;
     margin-right: 14px;
+    margin-top: 2px;
     flex-shrink: 0;
 }
 
@@ -112,25 +113,28 @@ body {
    TITLE TEXT (FIXED SHADOW BUG)
 ========================= */
 .text-track span {
-    display: inline-block;
+    display: block;
 
     font-size: 28px;
     font-weight: 700;
 
-    white-space: nowrap;
-
     color: #ffffff;
 
-    /* Spotify-like readability */
     text-shadow:
         0 2px 8px rgba(0, 0, 0, 0.8),
         0 1px 3px rgba(0, 0, 0, 0.6);
 
-    /* CRITICAL FIXES */
     background: transparent;
     border: none;
     padding: 0;
     margin: 0;
+
+    /* WRAP SETTINGS */
+    white-space: normal;
+    overflow-wrap: break-word;
+    line-height: 1.05;
+
+    max-width: 100%;
 }
 
 /* =========================
