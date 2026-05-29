@@ -62,7 +62,7 @@ async function generateCodeChallenge(verifier) {
 }
 
 /* =========================
-   TOKEN EXCHANGE
+   TOKEN EXCHANGE (SAVE REFRESH TOKEN)
 ========================= */
 async function getToken(code) {
     const verifier = localStorage.getItem("verifier");
@@ -77,7 +77,9 @@ async function getToken(code) {
 
     const res = await fetch("https://accounts.spotify.com/api/token", {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
         body
     });
 
@@ -90,10 +92,51 @@ async function getToken(code) {
 
     accessToken = data.access_token;
     localStorage.setItem("spotify_token", accessToken);
+
+    /* 🔥 SAVE REFRESH TOKEN (KEY FIX) */
+    if (data.refresh_token) {
+        localStorage.setItem("spotify_refresh_token", data.refresh_token);
+    }
 }
 
 /* =========================
-   NOW PLAYING (FIXED)
+   REFRESH TOKEN (AUTO LOGIN)
+========================= */
+async function refreshAccessToken() {
+    const refresh_token = localStorage.getItem("spotify_refresh_token");
+
+    if (!refresh_token) {
+        console.log("No refresh token found");
+        return;
+    }
+
+    const body = new URLSearchParams({
+        grant_type: "refresh_token",
+        refresh_token: refresh_token,
+        client_id: CLIENT_ID
+    });
+
+    const res = await fetch("https://accounts.spotify.com/api/token", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body
+    });
+
+    const data = await res.json();
+
+    if (!data.access_token) {
+        console.error("Refresh failed", data);
+        return;
+    }
+
+    accessToken = data.access_token;
+    localStorage.setItem("spotify_token", accessToken);
+}
+
+/* =========================
+   NOW PLAYING (FIXED AUTO REFRESH)
 ========================= */
 async function updateTrack() {
     if (!accessToken) return;
@@ -109,11 +152,10 @@ async function updateTrack() {
 
     console.log("STATUS:", res.status);
 
-    /* TOKEN EXPIRED */
+    /* TOKEN EXPIRED → AUTO REFRESH */
     if (res.status === 401) {
-        console.log("Token expired - clearing and reloading");
-        localStorage.removeItem("spotify_token");
-        location.reload();
+        console.log("Token expired → refreshing...");
+        await refreshAccessToken();
         return;
     }
 
@@ -180,6 +222,11 @@ function fitText() {
         el.style.fontSize = size + "px";
     }
 }
+
+/* =========================
+   AUTO REFRESH LOOP (KEEP ALIVE)
+========================= */
+setInterval(refreshAccessToken, 45 * 60 * 1000);
 
 /* =========================
    INIT
