@@ -108,7 +108,7 @@ async function updateTrack() {
     setTrack(title, artist, image);
 }
 
-/* UI UPDATE (NO SCROLL) */
+/* UI UPDATE (DYNAMIC FONT FIT) */
 function setTrack(title, artist, image) {
     document.getElementById("widget").style.display = "flex";
     document.getElementById("loginScreen").style.display = "none";
@@ -123,7 +123,23 @@ function setTrack(title, artist, image) {
         bg.style.backgroundImage = `url(${image})`;
     }
 
-    document.getElementById("titleText").innerText = title;
+    const titleEl = document.getElementById("titleText");
+    titleEl.innerText = title;
+
+    // reset font first
+    titleEl.style.fontSize = "28px";
+
+    // wait for layout then shrink if needed
+    requestAnimationFrame(() => {
+        const maxWidth = document.querySelector(".info").clientWidth;
+
+        let fontSize = 28;
+
+        while (titleEl.scrollWidth > maxWidth && fontSize > 16) {
+            fontSize -= 1;
+            titleEl.style.fontSize = fontSize + "px";
+        }
+    });
 }
 
 /* INIT */
