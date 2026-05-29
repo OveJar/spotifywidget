@@ -5,24 +5,7 @@ body {
     font-family: Arial, sans-serif;
 }
 
-/* LOGIN */
-.login-screen {
-    width: 450px;
-    height: 120px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.login-screen button {
-    padding: 10px 14px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-/* WIDGET */
+/* MAIN WIDGET */
 .widget {
     position: relative;
     width: 450px;
@@ -30,7 +13,7 @@ body {
     align-items: center;
     padding: 12px;
 
-    background: rgba(20,20,20,0.35);
+    background: rgba(20, 20, 20, 0.35);
     backdrop-filter: blur(12px);
     border-radius: 18px;
 
@@ -78,46 +61,18 @@ body {
     overflow: hidden;
 }
 
-/* SCROLL AREA */
-.text-scroll {
-    width: 100%;
-    overflow: hidden;
-}
-
-/* TRACK */
-.text-track {
-    display: flex;
-    width: max-content;
-    white-space: nowrap;
-}
-
-/* TEXT */
-.text-track span {
-    display: inline-block;
-    padding-right: 60px;
-
+/* TITLE */
+#title-track span {
     font-size: 28px;
-    font-weight: 700;
-
+    font-weight: bold;
     white-space: nowrap;
+
     color: white;
-
     text-shadow: 0 2px 8px rgba(0,0,0,0.8);
-}
-
-/* ANIMATION */
-.scroll {
-    animation: scrollLeft 12s linear infinite;
-}
-
-@keyframes scrollLeft {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
 }
 
 /* ARTIST */
 #artist {
     font-size: 18px;
     opacity: 0.75;
-    white-space: nowrap;
 }
