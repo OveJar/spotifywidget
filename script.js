@@ -1,3 +1,4 @@
+
 const CLIENT_ID = "696dc93dc55a4c4f9e6a0439f36c73ca";
 const REDIRECT_URI = "https://ovejar.github.io/spotifywidget/";
 
@@ -8,12 +9,17 @@ const SCOPES = [
 
 let accessToken = localStorage.getItem("spotify_token");
 
+console.log("SCRIPT LOADED");
+console.log("TOKEN:", accessToken);
+
 init();
 
 /* =========================
    LOGIN
 ========================= */
 function login() {
+    console.log("LOGIN CLICKED");
+
     const verifier = generateRandomString(128);
 
     generateCodeChallenge(verifier).then(challenge => {
@@ -28,8 +34,11 @@ function login() {
             code_challenge: challenge
         });
 
-        window.location.href =
-            "https://accounts.spotify.com/authorize?" + args;
+        const url = "https://accounts.spotify.com/authorize?" + args;
+
+        console.log("REDIRECTING:", url);
+
+        window.location.href = url;
     });
 }
 
@@ -39,9 +48,11 @@ function login() {
 function generateRandomString(length) {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     let text = "";
+
     for (let i = 0; i < length; i++) {
         text += chars.charAt(Math.floor(Math.random() * chars.length));
     }
+
     return text;
 }
 
@@ -56,7 +67,7 @@ async function generateCodeChallenge(verifier) {
 }
 
 /* =========================
-   TOKEN
+   TOKEN EXCHANGE
 ========================= */
 async function getToken(code) {
     const verifier = localStorage.getItem("verifier");
@@ -71,14 +82,18 @@ async function getToken(code) {
 
     const res = await fetch("https://accounts.spotify.com/api/token", {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
         body
     });
 
     const data = await res.json();
 
+    console.log("TOKEN RESPONSE:", data);
+
     if (!data.access_token) {
-        console.error("Token error", data);
+        console.error("TOKEN FAILED");
         return;
     }
 
@@ -90,7 +105,12 @@ async function getToken(code) {
    NOW PLAYING
 ========================= */
 async function updateTrack() {
-    if (!accessToken) return;
+    console.log("UPDATE TRACK");
+
+    if (!accessToken) {
+        console.log("NO TOKEN");
+        return;
+    }
 
     const res = await fetch(
         "https://api.spotify.com/v1/me/player/currently-playing",
@@ -101,13 +121,20 @@ async function updateTrack() {
         }
     );
 
+    console.log("STATUS:", res.status);
+
     if (res.status === 204 || res.status > 400) {
         setTrack("Not Playing", "", "");
         return;
     }
 
     const data = await res.json();
-    if (!data.item) return;
+    console.log("DATA:", data);
+
+    if (!data.item) {
+        setTrack("Not Playing", "", "");
+        return;
+    }
 
     const title = data.item.name;
     const artist = data.item.artists.map(a => a.name).join(", ");
@@ -117,7 +144,7 @@ async function updateTrack() {
 }
 
 /* =========================
-   UI UPDATE (SCROLL FIXED)
+   UI UPDATE
 ========================= */
 function setTrack(title, artist, image) {
     document.getElementById("widget").style.display = "flex";
@@ -140,7 +167,6 @@ function setTrack(title, artist, image) {
     t1.innerText = title;
     t2.innerText = title;
 
-    // restart animation safely
     track.classList.remove("scroll");
     void track.offsetWidth;
     track.classList.add("scroll");
@@ -152,6 +178,8 @@ function setTrack(title, artist, image) {
 async function init() {
     const params = new URLSearchParams(window.location.search);
     const code = params.get("code");
+
+    console.log("INIT CODE:", code);
 
     if (code) {
         await getToken(code);
