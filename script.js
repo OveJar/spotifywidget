@@ -18,8 +18,6 @@ init();
    LOGIN
 ========================= */
 function login() {
-    console.log("LOGIN CLICKED");
-
     const verifier = generateRandomString(128);
 
     generateCodeChallenge(verifier).then(challenge => {
@@ -31,7 +29,8 @@ function login() {
             scope: SCOPES.join(" "),
             redirect_uri: REDIRECT_URI,
             code_challenge_method: "S256",
-            code_challenge: challenge
+            code_challenge: challenge,
+            show_dialog: "true" // 🔥 forces clean auth + refresh token reliability
         });
 
         window.location.href =
@@ -62,7 +61,7 @@ async function generateCodeChallenge(verifier) {
 }
 
 /* =========================
-   TOKEN EXCHANGE (SAVE REFRESH TOKEN)
+   TOKEN EXCHANGE
 ========================= */
 async function getToken(code) {
     const verifier = localStorage.getItem("verifier");
@@ -93,20 +92,22 @@ async function getToken(code) {
     accessToken = data.access_token;
     localStorage.setItem("spotify_token", accessToken);
 
-    /* 🔥 SAVE REFRESH TOKEN (KEY FIX) */
+    /* 🔥 CRITICAL: save refresh token */
     if (data.refresh_token) {
         localStorage.setItem("spotify_refresh_token", data.refresh_token);
+    } else {
+        console.warn("No refresh token received!");
     }
 }
 
 /* =========================
-   REFRESH TOKEN (AUTO LOGIN)
+   REFRESH TOKEN (KEEP LOGGED IN)
 ========================= */
 async function refreshAccessToken() {
     const refresh_token = localStorage.getItem("spotify_refresh_token");
 
     if (!refresh_token) {
-        console.log("No refresh token found");
+        console.log("No refresh token → user must login again");
         return;
     }
 
@@ -127,7 +128,9 @@ async function refreshAccessToken() {
     const data = await res.json();
 
     if (!data.access_token) {
-        console.error("Refresh failed", data);
+        console.error("Refresh failed → forcing re-login");
+        localStorage.clear();
+        location.reload();
         return;
     }
 
@@ -136,7 +139,7 @@ async function refreshAccessToken() {
 }
 
 /* =========================
-   NOW PLAYING (FIXED AUTO REFRESH)
+   NOW PLAYING
 ========================= */
 async function updateTrack() {
     if (!accessToken) return;
@@ -152,9 +155,9 @@ async function updateTrack() {
 
     console.log("STATUS:", res.status);
 
-    /* TOKEN EXPIRED → AUTO REFRESH */
+    /* TOKEN EXPIRED → REFRESH IMMEDIATELY */
     if (res.status === 401) {
-        console.log("Token expired → refreshing...");
+        console.log("401 detected → refreshing token");
         await refreshAccessToken();
         return;
     }
@@ -200,9 +203,6 @@ function setTrack(title, artist, image) {
     if (image) {
         albumArt.src = image;
         bg.style.backgroundImage = `url(${image})`;
-    } else {
-        albumArt.src = "";
-        bg.style.backgroundImage = "none"; // 🔥 IMPORTANT FIX
     }
 
     requestAnimationFrame(fitText);
@@ -227,9 +227,9 @@ function fitText() {
 }
 
 /* =========================
-   AUTO REFRESH LOOP (KEEP ALIVE)
+   AUTO KEEP-ALIVE (IMPORTANT)
 ========================= */
-setInterval(refreshAccessToken, 45 * 60 * 1000);
+setInterval(refreshAccessToken, 50 * 60 * 1000);
 
 /* =========================
    INIT
