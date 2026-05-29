@@ -50,7 +50,7 @@ body {
     background-position: center;
     filter: blur(13px);
     transform: scale(1.15);
-    opacity: 0.55;
+    opacity: 0;
     z-index: 0;
 }
 
@@ -80,7 +80,7 @@ body {
     display: flex;
     flex-direction: column;
 
-    justify-content: flex-end; /* 🔥 pins text to bottom */
+    justify-content: flex-end;
 
     flex: 1;
     min-width: 0;
@@ -109,18 +109,14 @@ body {
     font-weight: 700;
 
     color: #ffffff;
-
-    text-shadow:
-        0 2px 8px rgba(0, 0, 0, 0.8),
-        0 1px 3px rgba(0, 0, 0, 0.6);
-
-    line-height: 1.05;
+  
+        
+    line-height: 1.4;
 
     white-space: normal;
     overflow-wrap: break-word;
     word-break: break-word;
 
-    /* IMPORTANT CLAMP FIX */
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
 
@@ -140,8 +136,7 @@ body {
     text-overflow: ellipsis;
 }
 
-/*=
-   fade in next song it works idk lmao
+/* fade in next song it works idk lmao
  */
 @keyframes fadeIn {
     from {
