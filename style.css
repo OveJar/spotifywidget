@@ -30,6 +30,7 @@ body {
 .widget {
     position: relative;
     width: 450px;
+    height: 125px;
     display: inline-block;
     align-items: flex-start;
     padding: 12px;
