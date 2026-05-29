@@ -9,16 +9,12 @@ body {
 .widget {
     position: relative;
     width: 450px;
-    box-sizing: border-box;
-
     display: flex;
     align-items: center;
-
     padding: 12px;
 
     background: rgba(20, 20, 20, 0.35);
     backdrop-filter: blur(12px);
-
     border-radius: 18px;
 
     color: white;
@@ -32,7 +28,7 @@ body {
     background-size: cover;
     background-position: center;
     filter: blur(13px);
-    transform: scale(01.15);
+    transform: scale(1.15);
     opacity: 0.55;
     z-index: 0;
 }
@@ -55,78 +51,35 @@ body {
     height: 72px;
     border-radius: 12px;
     margin-right: 14px;
-    flex-shrink: 0;
 }
 
-/* ===== TEXT AREA (IMPORTANT FIX HERE) ===== */
+/* ===== INFO ===== */
 .info {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-
     flex: 1;
-    min-width: 0;   /* CRITICAL: prevents flex shrinking issues */
+    min-width: 0;
     overflow: hidden;
 }
 
-/* ===== SCROLL CONTAINER ===== */
+/* ===== TITLE ===== */
 .text-scroll {
     width: 100%;
     overflow: hidden;
 }
-/* ===== TRACK ===== */
-.text-track {
-    display: flex;
-    align-items: center;
-    width: 100%;
-}
 
-#title-track span {
-    font-size: 28px;
-    font-weight: bold;
-    display: block;
-}
-/* active animation */
-.scroll-active {
-    animation: marquee var(--duration) linear infinite;
-}
-
-@keyframes marquee {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-}
-
-/* ===== TEXT ===== */
 .text-track span {
     font-size: 28px;
     font-weight: 700;
-
     white-space: nowrap;
 
-    /* ===== SPOTIFY-STYLE READABILITY ===== */
-    color: #ffffff;
-
-    text-shadow:
-        0 1px 3px rgba(0, 0, 0, 0.8),
-        0 2px 8px rgba(0, 0, 0, 0.6);
-
-    letter-spacing: 0.2px;
+    color: #fff;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.8);
 }
 
+/* ===== ARTIST ===== */
 #artist {
     font-size: 18px;
     opacity: 0.75;
     white-space: nowrap;
-}
-
-/* ===== FADE IN ===== */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }
