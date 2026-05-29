@@ -8,10 +8,15 @@ const SCOPES = [
 
 let accessToken = localStorage.getItem("spotify_token");
 
+/* =========================
+   INIT
+========================= */
 init();
 
 /* LOGIN */
 function login() {
+    console.log("LOGIN CLICKED");
+
     const verifier = generateRandomString(128);
 
     generateCodeChallenge(verifier).then(challenge => {
@@ -26,8 +31,10 @@ function login() {
             code_challenge: challenge
         });
 
-        window.location.href =
-            "https://accounts.spotify.com/authorize?" + args;
+        const url = "https://accounts.spotify.com/authorize?" + args;
+        console.log("Redirecting:", url);
+
+        window.location.href = url;
     });
 }
 
@@ -51,7 +58,13 @@ async function generateCodeChallenge(verifier) {
         .replace(/=+$/, "");
 }
 
+<<<<<<< HEAD
 /* TOKEN */
+=======
+/* =========================
+   TOKEN EXCHANGE
+========================= */
+>>>>>>> parent of 262c8c1 (3)
 async function getToken(code) {
     const verifier = localStorage.getItem("verifier");
 
@@ -72,7 +85,7 @@ async function getToken(code) {
     const data = await res.json();
 
     if (!data.access_token) {
-        console.error("Token error", data);
+        console.error("Token error:", data);
         return;
     }
 
@@ -108,21 +121,31 @@ async function updateTrack() {
     setTrack(title, artist, image);
 }
 
+<<<<<<< HEAD
 /* UI UPDATE (DYNAMIC FONT FIT) */
+=======
+/* =========================
+   UI UPDATE
+========================= */
+>>>>>>> parent of 262c8c1 (3)
 function setTrack(title, artist, image) {
     document.getElementById("widget").style.display = "flex";
     document.getElementById("loginScreen").style.display = "none";
 
-    document.getElementById("artist").innerText = artist;
-
-    const album = document.getElementById("albumArt");
+    const trackEl = document.getElementById("title-track");
+    const artistEl = document.getElementById("artist");
+    const albumArt = document.getElementById("albumArt");
     const bg = document.getElementById("bg");
 
+    trackEl.innerHTML = `<span id="titleText">${title}</span>`;
+    artistEl.innerText = artist;
+
     if (image) {
-        album.src = image;
+        albumArt.src = image;
         bg.style.backgroundImage = `url(${image})`;
     }
 
+<<<<<<< HEAD
     const titleEl = document.getElementById("titleText");
     titleEl.innerText = title;
 
@@ -143,6 +166,32 @@ function setTrack(title, artist, image) {
 }
 
 /* INIT */
+=======
+    requestAnimationFrame(fitText);
+}
+
+/* =========================
+   AUTO FIT TEXT
+========================= */
+function fitText() {
+    const el = document.getElementById("titleText");
+    const container = document.getElementById("title-track");
+
+    if (!el || !container) return;
+
+    let size = 28;
+    el.style.fontSize = size + "px";
+
+    while (el.scrollWidth > container.offsetWidth && size > 10) {
+        size--;
+        el.style.fontSize = size + "px";
+    }
+}
+
+/* =========================
+   INIT FLOW (IMPORTANT FIX)
+========================= */
+>>>>>>> parent of 262c8c1 (3)
 async function init() {
     const params = new URLSearchParams(window.location.search);
     const code = params.get("code");
