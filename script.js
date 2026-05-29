@@ -45,31 +45,19 @@ function login() {
    PKCE HELPERS
 ========================= */
 function generateRandomString(length) {
-    const chars =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     let text = "";
-
     for (let i = 0; i < length; i++) {
-        text += chars.charAt(
-            Math.floor(Math.random() * chars.length)
-        );
+        text += chars.charAt(Math.floor(Math.random() * chars.length));
     }
-
     return text;
 }
 
 async function generateCodeChallenge(verifier) {
     const data = new TextEncoder().encode(verifier);
+    const digest = await crypto.subtle.digest("SHA-256", data);
 
-    const digest = await crypto.subtle.digest(
-        "SHA-256",
-        data
-    );
-
-    return btoa(
-        String.fromCharCode(...new Uint8Array(digest))
-    )
+    return btoa(String.fromCharCode(...new Uint8Array(digest)))
         .replace(/\+/g, "-")
         .replace(/\//g, "_")
         .replace(/=+$/, "");
@@ -79,7 +67,6 @@ async function generateCodeChallenge(verifier) {
    TOKEN EXCHANGE
 ========================= */
 async function getToken(code) {
-
     const verifier = localStorage.getItem("verifier");
 
     const body = new URLSearchParams({
@@ -90,17 +77,11 @@ async function getToken(code) {
         code_verifier: verifier
     });
 
-    const res = await fetch(
-        "https://accounts.spotify.com/api/token",
-        {
-            method: "POST",
-            headers: {
-                "Content-Type":
-                    "application/x-www-form-urlencoded"
-            },
-            body
-        }
-    );
+    const res = await fetch("https://accounts.spotify.com/api/token", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body
+    });
 
     const data = await res.json();
 
@@ -110,129 +91,66 @@ async function getToken(code) {
     }
 
     accessToken = data.access_token;
-
-    localStorage.setItem(
-        "spotify_token",
-        accessToken
-    );
+    localStorage.setItem("spotify_token", accessToken);
 }
 
 /* =========================
    NOW PLAYING
 ========================= */
 async function updateTrack() {
-
     if (!accessToken) return;
 
-    try {
-
-        const res = await fetch(
-            "https://api.spotify.com/v1/me/player/currently-playing",
-            {
-                headers: {
-                    Authorization:
-                        "Bearer " + accessToken
-                }
+    const res = await fetch(
+        "https://api.spotify.com/v1/me/player/currently-playing",
+        {
+            headers: {
+                Authorization: "Bearer " + accessToken
             }
-        );
+        }
+    );
 
-        /* -------------------------
-           FAILED / NOT PLAYING
-        ------------------------- */
-        if (res.status === 204 || res.status > 400) {
+    if (res.status === 204 || res.status > 400) {
 
-            failedChecks++;
+        failedChecks++;
 
-            // wait a few checks before clearing widget
-            if (failedChecks >= 3) {
-                setTrack(
-                    "Not Playing",
-                    "",
-                    ""
-                );
-            }
-
-            return;
+        if (failedChecks >= 3) {
+            setTrack("Not Playing", "", "");
         }
 
-        const data = await res.json();
-
-        // successful request
-        failedChecks = 0;
-
-        if (!data.item) return;
-
-        const title = data.item.name;
-
-        const artist = data.item.artists
-            .map(a => a.name)
-            .join(", ");
-
-        const image =
-            data.item.album.images[0].url;
-
-        setTrack(
-            title,
-            artist,
-            image
-        );
-
-    } catch (err) {
-
-        console.error(
-            "Playback fetch error:",
-            err
-        );
+        return;
     }
+
+    const data = await res.json();
+
+    failedChecks = 0;
+
+    if (!data.item) return;
+
+    const title = data.item.name;
+    const artist = data.item.artists.map(a => a.name).join(", ");
+    const image = data.item.album.images[0].url;
+
+    setTrack(title, artist, image);
 }
 
 /* =========================
    UI UPDATE
 ========================= */
-function setTrack(
-    title,
-    artist,
-    image
-) {
+function setTrack(title, artist, image) {
+    document.getElementById("widget").style.display = "flex";
+    document.getElementById("loginScreen").style.display = "none";
 
-    document.getElementById(
-        "widget"
-    ).style.display = "flex";
+    const trackEl = document.getElementById("title-track");
+    const artistEl = document.getElementById("artist");
+    const albumArt = document.getElementById("albumArt");
+    const bg = document.getElementById("bg");
 
-    document.getElementById(
-        "loginScreen"
-    ).style.display = "none";
-
-    const trackEl =
-        document.getElementById(
-            "title-track"
-        );
-
-    const artistEl =
-        document.getElementById(
-            "artist"
-        );
-
-    const albumArt =
-        document.getElementById(
-            "albumArt"
-        );
-
-    const bg =
-        document.getElementById(
-            "bg"
-        );
-
-    trackEl.innerHTML =
-        `<span id="titleText">${title}</span>`;
-
+    trackEl.innerHTML = `<span id="titleText">${title}</span>`;
     artistEl.innerText = artist;
 
     if (image) {
         albumArt.src = image;
-
-        bg.style.backgroundImage =
-            `url(${image})`;
+        bg.style.backgroundImage = `url(${image})`;
     }
 
     requestAnimationFrame(fitText);
@@ -242,33 +160,17 @@ function setTrack(
    AUTO FIT TEXT
 ========================= */
 function fitText() {
-
-    const el =
-        document.getElementById(
-            "titleText"
-        );
-
-    const container =
-        document.getElementById(
-            "title-track"
-        );
+    const el = document.getElementById("titleText");
+    const container = document.getElementById("title-track");
 
     if (!el || !container) return;
 
     let size = 28;
+    el.style.fontSize = size + "px";
 
-    el.style.fontSize =
-        size + "px";
-
-    while (
-        el.scrollWidth >
-            container.offsetWidth &&
-        size > 10
-    ) {
+    while (el.scrollWidth > container.offsetWidth && size > 10) {
         size--;
-
-        el.style.fontSize =
-            size + "px";
+        el.style.fontSize = size + "px";
     }
 }
 
@@ -276,47 +178,22 @@ function fitText() {
    INIT FLOW
 ========================= */
 async function init() {
-
-    const params =
-        new URLSearchParams(
-            window.location.search
-        );
-
-    const code =
-        params.get("code");
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
 
     if (code) {
-
         await getToken(code);
-
-        window.history.replaceState(
-            {},
-            document.title,
-            "/"
-        );
+        window.history.replaceState({}, document.title, "/");
     }
 
     if (!accessToken) {
-
-        document.getElementById(
-            "loginScreen"
-        ).style.display = "flex";
-
+        document.getElementById("loginScreen").style.display = "flex";
         return;
     }
 
-    document.getElementById(
-        "widget"
-    ).style.display = "flex";
-
-    document.getElementById(
-        "loginScreen"
-    ).style.display = "none";
+    document.getElementById("widget").style.display = "flex";
+    document.getElementById("loginScreen").style.display = "none";
 
     updateTrack();
-
-    setInterval(
-        updateTrack,
-        3000
-    );
+    setInterval(updateTrack, 3000);
 }
