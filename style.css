@@ -2,9 +2,12 @@ body {
     margin: 0;
     overflow: hidden;
     background: transparent;
-    font-family: Arial;
+    font-family: Arial, sans-serif;
 }
 
+/* =========================
+   LOGIN SCREEN
+========================= */
 .login-screen {
     width: 450px;
     height: 120px;
@@ -21,18 +24,27 @@ body {
     font-weight: bold;
 }
 
+/* =========================
+   MAIN WIDGET
+========================= */
 .widget {
     position: relative;
     width: 450px;
     display: flex;
     align-items: center;
     padding: 12px;
-    background: rgba(20,20,20,0.35);
+
+    background: rgba(20, 20, 20, 0.35);
     backdrop-filter: blur(12px);
     border-radius: 18px;
+
     color: white;
+    overflow: hidden;
 }
 
+/* =========================
+   BACKGROUND BLUR
+========================= */
 .bg {
     position: absolute;
     inset: 0;
@@ -41,34 +53,105 @@ body {
     filter: blur(13px);
     transform: scale(1.15);
     opacity: 0.55;
+    z-index: 0;
+}
+
+.bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
 }
 
 .widget > *:not(.bg) {
     position: relative;
+    z-index: 1;
 }
 
+/* =========================
+   ALBUM ART
+========================= */
 #albumArt {
     width: 72px;
     height: 72px;
     border-radius: 12px;
     margin-right: 14px;
+    flex-shrink: 0;
 }
 
+/* =========================
+   INFO CONTAINER (IMPORTANT FIX)
+========================= */
 .info {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+
     flex: 1;
-    min-width: 0;
+    min-width: 0;        /* CRITICAL FIX */
+    overflow: hidden;
 }
 
-.text-track span {
-    font-size: 28px;
-    font-weight: bold;
+/* =========================
+   TITLE SCROLL AREA (FIXED)
+========================= */
+.text-scroll {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+/* IMPORTANT: prevents phantom box rendering */
+.text-track {
+    display: inline-block;
     white-space: nowrap;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+    width: max-content;
 }
 
+/* =========================
+   TITLE TEXT (FIXED SHADOW BUG)
+========================= */
+.text-track span {
+    display: inline-block;
+
+    font-size: 28px;
+    font-weight: 700;
+
+    white-space: nowrap;
+
+    color: #ffffff;
+
+    /* Spotify-like readability */
+    text-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.8),
+        0 1px 3px rgba(0, 0, 0, 0.6);
+
+    /* CRITICAL FIXES */
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* =========================
+   ARTIST TEXT
+========================= */
 #artist {
     font-size: 18px;
     opacity: 0.75;
+    white-space: nowrap;
+}
+
+/* =========================
+   OPTIONAL: smooth fade in
+========================= */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
