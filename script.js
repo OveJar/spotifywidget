@@ -34,10 +34,8 @@ function login() {
             code_challenge: challenge
         });
 
-        const url = "https://accounts.spotify.com/authorize?" + args;
-        console.log("Redirecting:", url);
-
-        window.location.href = url;
+        window.location.href =
+            "https://accounts.spotify.com/authorize?" + args;
     });
 }
 
@@ -95,7 +93,7 @@ async function getToken(code) {
 }
 
 /* =========================
-   NOW PLAYING
+   NOW PLAYING (FIXED)
 ========================= */
 async function updateTrack() {
     if (!accessToken) return;
@@ -109,8 +107,18 @@ async function updateTrack() {
         }
     );
 
-    if (res.status === 204 || res.status > 400) {
+    console.log("STATUS:", res.status);
 
+    /* TOKEN EXPIRED */
+    if (res.status === 401) {
+        console.log("Token expired - clearing and reloading");
+        localStorage.removeItem("spotify_token");
+        location.reload();
+        return;
+    }
+
+    /* NO PLAYBACK */
+    if (res.status === 204 || res.status > 400) {
         failedChecks++;
 
         if (failedChecks >= 3) {
@@ -121,7 +129,6 @@ async function updateTrack() {
     }
 
     const data = await res.json();
-
     failedChecks = 0;
 
     if (!data.item) return;
@@ -175,7 +182,7 @@ function fitText() {
 }
 
 /* =========================
-   INIT FLOW
+   INIT
 ========================= */
 async function init() {
     const params = new URLSearchParams(window.location.search);
