@@ -31,9 +31,12 @@ body {
     position: relative;
     width: 450px;
     height: 100px;
+
     display: flex;
-    align-items: flex-start;
+    align-items: center;
+
     padding: 12px;
+    box-sizing: border-box;
 
     background: rgba(20, 20, 20, 0.35);
     backdrop-filter: blur(12px);
@@ -41,8 +44,6 @@ body {
 
     color: white;
     overflow: hidden;
-
-    box-sizing: border-box;
 }
 
 /* =========================
