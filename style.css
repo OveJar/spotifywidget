@@ -39,7 +39,7 @@ body {
     border-radius: 18px;
 
     color: white;
-    overflow: hidden;
+    overflow: visible;
 }
 
 /* =========================
@@ -91,6 +91,8 @@ body {
     flex: 1;
     min-width: 0;        /* CRITICAL FIX */
     overflow: hidden;
+
+    height: auto;
 }
 
 /* =========================
@@ -98,7 +100,7 @@ body {
 ========================= */
 .text-scroll {
     width: 100%;
-    overflow: hidden;
+    overflow: visible;
     position: relative;
 }
 
