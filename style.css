@@ -2,26 +2,37 @@ body {
     margin: 0;
     overflow: hidden;
     background: transparent;
-    font-family: Arial, sans-serif;
+    font-family: Arial;
 }
 
-/* ===== MAIN WIDGET ===== */
+.login-screen {
+    width: 450px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-screen button {
+    padding: 10px 14px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
 .widget {
     position: relative;
     width: 450px;
     display: flex;
     align-items: center;
     padding: 12px;
-
-    background: rgba(20, 20, 20, 0.35);
+    background: rgba(20,20,20,0.35);
     backdrop-filter: blur(12px);
     border-radius: 18px;
-
     color: white;
-    overflow: hidden;
 }
 
-/* ===== BACKGROUND ===== */
 .bg {
     position: absolute;
     inset: 0;
@@ -30,22 +41,12 @@ body {
     filter: blur(13px);
     transform: scale(1.15);
     opacity: 0.55;
-    z-index: 0;
-}
-
-.bg::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.65);
 }
 
 .widget > *:not(.bg) {
     position: relative;
-    z-index: 1;
 }
 
-/* ===== ALBUM ART ===== */
 #albumArt {
     width: 72px;
     height: 72px;
@@ -53,33 +54,21 @@ body {
     margin-right: 14px;
 }
 
-/* ===== INFO ===== */
 .info {
     display: flex;
     flex-direction: column;
     flex: 1;
     min-width: 0;
-    overflow: hidden;
-}
-
-/* ===== TITLE ===== */
-.text-scroll {
-    width: 100%;
-    overflow: hidden;
 }
 
 .text-track span {
     font-size: 28px;
-    font-weight: 700;
+    font-weight: bold;
     white-space: nowrap;
-
-    color: #fff;
     text-shadow: 0 2px 8px rgba(0,0,0,0.8);
 }
 
-/* ===== ARTIST ===== */
 #artist {
     font-size: 18px;
     opacity: 0.75;
-    white-space: nowrap;
 }
