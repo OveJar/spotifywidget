@@ -92,6 +92,7 @@ body {
     flex: 1;
     min-width: 0;
     overflow: hidden;
+    height: 100%;
 }
 
 /* =========================
@@ -101,6 +102,7 @@ body {
     width: 100%;
     overflow: hidden;
     position: relative;
+    max-height: 44px;
 }
 
 .text-track {
@@ -122,6 +124,8 @@ body {
         0 2px 8px rgba(0, 0, 0, 0.8),
         0 1px 3px rgba(0, 0, 0, 0.6);
 
+    line-height: 1.05;
+    
     background: transparent;
     border: none;
     padding: 0;
