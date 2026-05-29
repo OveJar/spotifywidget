@@ -2,10 +2,13 @@ body {
     margin: 0;
     overflow: hidden;
     background: transparent;
-    font-family: Arial, sans-serif;
+    font-family: Arial;
 }
 
+<<<<<<< HEAD
 /* LOGIN SCREEN */
+=======
+>>>>>>> parent of e514131 (2)
 .login-screen {
     width: 450px;
     height: 120px;
@@ -22,23 +25,26 @@ body {
     font-weight: bold;
 }
 
+<<<<<<< HEAD
 /* MAIN WIDGET */
+=======
+>>>>>>> parent of e514131 (2)
 .widget {
     position: relative;
     width: 450px;
     display: flex;
     align-items: center;
     padding: 12px;
-
-    background: rgba(20, 20, 20, 0.35);
+    background: rgba(20,20,20,0.35);
     backdrop-filter: blur(12px);
     border-radius: 18px;
-
     color: white;
-    overflow: hidden;
 }
 
+<<<<<<< HEAD
 /* BACKGROUND */
+=======
+>>>>>>> parent of e514131 (2)
 .bg {
     position: absolute;
     inset: 0;
@@ -47,6 +53,7 @@ body {
     filter: blur(13px);
     transform: scale(1.15);
     opacity: 0.55;
+<<<<<<< HEAD
 }
 
 .bg::after {
@@ -54,6 +61,8 @@ body {
     position: absolute;
     inset: 0;
     background: rgba(0,0,0,0.65);
+=======
+>>>>>>> parent of e514131 (2)
 }
 
 /* CONTENT */
@@ -61,7 +70,10 @@ body {
     position: relative;
 }
 
+<<<<<<< HEAD
 /* ALBUM */
+=======
+>>>>>>> parent of e514131 (2)
 #albumArt {
     width: 72px;
     height: 72px;
@@ -69,7 +81,10 @@ body {
     margin-right: 14px;
 }
 
+<<<<<<< HEAD
 /* INFO */
+=======
+>>>>>>> parent of e514131 (2)
 .info {
     display: flex;
     flex-direction: column;
@@ -77,20 +92,29 @@ body {
     min-width: 0;
 }
 
+<<<<<<< HEAD
 /* TITLE */
 .text-scroll {
     overflow: hidden;
 }
 
+=======
+>>>>>>> parent of e514131 (2)
 .text-track span {
     font-size: 28px;
     font-weight: bold;
     white-space: nowrap;
+<<<<<<< HEAD
     color: white;
     text-shadow: 0 2px 8px rgba(0,0,0,0.8);
 }
 
 /* ARTIST */
+=======
+    text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+}
+
+>>>>>>> parent of e514131 (2)
 #artist {
     font-size: 18px;
     opacity: 0.75;
