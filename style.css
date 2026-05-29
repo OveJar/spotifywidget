@@ -39,7 +39,7 @@ body {
     border-radius: 18px;
 
     color: white;
-    overflow: visible;
+    overflow: hidden;
 }
 
 /* =========================
@@ -81,7 +81,7 @@ body {
 }
 
 /* =========================
-   INFO CONTAINER (IMPORTANT FIX)
+   INFO CONTAINER
 ========================= */
 .info {
     display: flex;
@@ -89,32 +89,28 @@ body {
     justify-content: center;
 
     flex: 1;
-    min-width: 0;        /* CRITICAL FIX */
+    min-width: 0;
     overflow: hidden;
-
-    height: auto;
 }
 
 /* =========================
-   TITLE SCROLL AREA (FIXED)
+   TITLE AREA
 ========================= */
 .text-scroll {
     width: 100%;
-    overflow: visible;
+    overflow: hidden;
     position: relative;
 }
 
-/* IMPORTANT: prevents phantom box rendering */
 .text-track {
-    display: inline-block;
     width: 100%;
 }
 
 /* =========================
-   TITLE TEXT (FIXED SHADOW BUG)
+   TITLE TEXT
 ========================= */
 .text-track span {
-    display: block;
+    display: -webkit-box;
 
     font-size: 28px;
     font-weight: 700;
@@ -130,10 +126,19 @@ body {
     padding: 0;
     margin: 0;
 
-    /* WRAP SETTINGS */
+    line-height: 1.05;
+
+    /* WRAPPING */
     white-space: normal;
     overflow-wrap: break-word;
-    line-height: 1.05;
+    word-break: break-word;
+
+    /* MAX 2 LINES */
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
 
     max-width: 100%;
 }
@@ -145,16 +150,21 @@ body {
     font-size: 18px;
     opacity: 0.75;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    margin-top: 4px;
 }
 
 /* =========================
-   OPTIONAL: smooth fade in
+   OPTIONAL FADE ANIMATION
 ========================= */
 @keyframes fadeIn {
     from {
         opacity: 0;
         transform: translateY(6px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
