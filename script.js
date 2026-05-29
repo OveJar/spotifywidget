@@ -9,9 +9,16 @@ const SCOPES = [
 let accessToken = localStorage.getItem("spotify_token");
 
 /* =========================
-   LOGIN BUTTON FLOW
+   INIT
+========================= */
+init();
+
+/* =========================
+   LOGIN
 ========================= */
 function login() {
+    console.log("LOGIN CLICKED");
+
     const verifier = generateRandomString(128);
 
     generateCodeChallenge(verifier).then(challenge => {
@@ -26,7 +33,10 @@ function login() {
             code_challenge: challenge
         });
 
-        window.location = "https://accounts.spotify.com/authorize?" + args;
+        const url = "https://accounts.spotify.com/authorize?" + args;
+        console.log("Redirecting:", url);
+
+        window.location.href = url;
     });
 }
 
@@ -34,8 +44,8 @@ function login() {
    PKCE HELPERS
 ========================= */
 function generateRandomString(length) {
-    let text = '';
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let text = "";
     for (let i = 0; i < length; i++) {
         text += chars.charAt(Math.floor(Math.random() * chars.length));
     }
@@ -47,9 +57,9 @@ async function generateCodeChallenge(verifier) {
     const digest = await crypto.subtle.digest("SHA-256", data);
 
     return btoa(String.fromCharCode(...new Uint8Array(digest)))
-        .replace(/\+/g, '-')
-        .replace(/\//g, '_')
-        .replace(/=+$/, '');
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_")
+        .replace(/=+$/, "");
 }
 
 /* =========================
@@ -68,15 +78,18 @@ async function getToken(code) {
 
     const res = await fetch("https://accounts.spotify.com/api/token", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body
     });
 
     const data = await res.json();
-    accessToken = data.access_token;
 
+    if (!data.access_token) {
+        console.error("Token error:", data);
+        return;
+    }
+
+    accessToken = data.access_token;
     localStorage.setItem("spotify_token", accessToken);
 }
 
@@ -152,7 +165,7 @@ function fitText() {
 }
 
 /* =========================
-   INIT
+   INIT FLOW (IMPORTANT FIX)
 ========================= */
 async function init() {
     const params = new URLSearchParams(window.location.search);
@@ -168,11 +181,9 @@ async function init() {
         return;
     }
 
-    document.getElementById("loginScreen").style.display = "none";
     document.getElementById("widget").style.display = "flex";
+    document.getElementById("loginScreen").style.display = "none";
 
     updateTrack();
     setInterval(updateTrack, 3000);
 }
-
-init();

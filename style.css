@@ -2,10 +2,9 @@ body {
     margin: 0;
     overflow: hidden;
     background: transparent;
-    font-family: Arial, sans-serif;
+    font-family: Arial;
 }
 
-/* LOGIN SCREEN */
 .login-screen {
     width: 450px;
     height: 120px;
@@ -15,30 +14,25 @@ body {
 }
 
 .login-screen button {
-    padding: 10px 16px;
-    border-radius: 10px;
+    padding: 10px 14px;
     border: none;
+    border-radius: 10px;
     cursor: pointer;
     font-weight: bold;
 }
 
-/* MAIN WIDGET */
 .widget {
     position: relative;
     width: 450px;
     display: flex;
     align-items: center;
     padding: 12px;
-
-    background: rgba(20, 20, 20, 0.35);
+    background: rgba(20,20,20,0.35);
     backdrop-filter: blur(12px);
     border-radius: 18px;
-
     color: white;
-    overflow: hidden;
 }
 
-/* BACKGROUND */
 .bg {
     position: absolute;
     inset: 0;
@@ -49,19 +43,10 @@ body {
     opacity: 0.55;
 }
 
-.bg::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: rgba(0,0,0,0.65);
-}
-
-/* CONTENT */
 .widget > *:not(.bg) {
     position: relative;
 }
 
-/* ALBUM */
 #albumArt {
     width: 72px;
     height: 72px;
@@ -69,7 +54,6 @@ body {
     margin-right: 14px;
 }
 
-/* INFO */
 .info {
     display: flex;
     flex-direction: column;
@@ -77,20 +61,13 @@ body {
     min-width: 0;
 }
 
-/* TITLE */
-.text-scroll {
-    overflow: hidden;
-}
-
 .text-track span {
     font-size: 28px;
     font-weight: bold;
     white-space: nowrap;
-    color: white;
     text-shadow: 0 2px 8px rgba(0,0,0,0.8);
 }
 
-/* ARTIST */
 #artist {
     font-size: 18px;
     opacity: 0.75;
