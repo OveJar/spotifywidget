@@ -6,11 +6,7 @@
 
 <body>
 
-<div class="login-screen" id="loginScreen">
-    <button onclick="login()">Login with Spotify</button>
-</div>
-
-<div class="widget" id="widget" style="display:none;">
+<div class="widget">
 
     <div class="bg" id="bg"></div>
 
@@ -18,13 +14,12 @@
 
     <div class="info">
 
-        <div class="text-scroll">
-            <div class="text-track scroll" id="title-track">
-                <span id="titleText">Not Playing</span>
-                <span id="titleText2"></span>
-            </div>
+        <!-- TITLE (NO SCROLL VERSION) -->
+        <div id="title-track">
+            <span id="title">Not Playing</span>
         </div>
 
+        <!-- ARTIST -->
         <div id="artist"></div>
 
     </div>
