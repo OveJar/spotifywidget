@@ -61,7 +61,7 @@ body {
     z-index: 1;
 }
 
-/* ALBUM ART */
+/* ALBUM */
 #albumArt {
     width: 72px;
     height: 72px;
@@ -98,13 +98,14 @@ body {
 
     font-size: 28px;
     font-weight: 700;
-    white-space: nowrap;
 
+    white-space: nowrap;
     color: white;
+
     text-shadow: 0 2px 8px rgba(0,0,0,0.8);
 }
 
-/* SCROLL ANIMATION */
+/* ANIMATION */
 .scroll {
     animation: scrollLeft 12s linear infinite;
 }
