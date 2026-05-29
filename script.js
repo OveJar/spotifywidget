@@ -200,6 +200,9 @@ function setTrack(title, artist, image) {
     if (image) {
         albumArt.src = image;
         bg.style.backgroundImage = `url(${image})`;
+    } else {
+        albumArt.src = "";
+        bg.style.backgroundImage = "none"; // 🔥 IMPORTANT FIX
     }
 
     requestAnimationFrame(fitText);
