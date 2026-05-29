@@ -235,13 +235,42 @@ function setTrack(
             `url(${image})`;
     }
 
-
+    requestAnimationFrame(fitText);
 }
 
 /* =========================
    AUTO FIT TEXT
 ========================= */
+function fitText() {
 
+    const el =
+        document.getElementById(
+            "titleText"
+        );
+
+    const container =
+        document.getElementById(
+            "title-track"
+        );
+
+    if (!el || !container) return;
+
+    let size = 28;
+
+    el.style.fontSize =
+        size + "px";
+
+    while (
+        el.scrollWidth >
+            container.offsetWidth &&
+        size > 10
+    ) {
+        size--;
+
+        el.style.fontSize =
+            size + "px";
+    }
+}
 
 /* =========================
    INIT FLOW
