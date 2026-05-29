@@ -78,45 +78,24 @@ body {
     overflow: hidden;
 }
 
-/* SCROLL AREA */
-.text-scroll {
-    width: 100%;
-    overflow: hidden;
-}
-
-/* TRACK */
-.text-track {
-    display: flex;
-    width: max-content;
-    white-space: nowrap;
-}
-
-/* TEXT */
-.text-track span {
-    display: inline-block;
-    padding-right: 60px;
-
-    font-size: 28px;
+/* TITLE (NO SCROLL, JUST FIT) */
+#titleText {
+    font-size: 26px;
     font-weight: 700;
-    white-space: nowrap;
-
     color: white;
     text-shadow: 0 2px 8px rgba(0,0,0,0.8);
-}
 
-/* SCROLL ANIMATION */
-.scroll {
-    animation: scrollLeft 12s linear infinite;
-}
-
-@keyframes scrollLeft {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* ARTIST */
 #artist {
     font-size: 18px;
     opacity: 0.75;
+
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

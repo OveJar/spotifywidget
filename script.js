@@ -10,9 +10,7 @@ let accessToken = localStorage.getItem("spotify_token");
 
 init();
 
-/* =========================
-   LOGIN
-========================= */
+/* LOGIN */
 function login() {
     const verifier = generateRandomString(128);
 
@@ -33,9 +31,7 @@ function login() {
     });
 }
 
-/* =========================
-   PKCE HELPERS
-========================= */
+/* PKCE */
 function generateRandomString(length) {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     let text = "";
@@ -55,9 +51,7 @@ async function generateCodeChallenge(verifier) {
         .replace(/=+$/, "");
 }
 
-/* =========================
-   TOKEN
-========================= */
+/* TOKEN */
 async function getToken(code) {
     const verifier = localStorage.getItem("verifier");
 
@@ -86,9 +80,7 @@ async function getToken(code) {
     localStorage.setItem("spotify_token", accessToken);
 }
 
-/* =========================
-   NOW PLAYING
-========================= */
+/* NOW PLAYING */
 async function updateTrack() {
     if (!accessToken) return;
 
@@ -116,9 +108,7 @@ async function updateTrack() {
     setTrack(title, artist, image);
 }
 
-/* =========================
-   UI UPDATE (SCROLL FIXED)
-========================= */
+/* UI UPDATE (NO SCROLL) */
 function setTrack(title, artist, image) {
     document.getElementById("widget").style.display = "flex";
     document.getElementById("loginScreen").style.display = "none";
@@ -133,22 +123,10 @@ function setTrack(title, artist, image) {
         bg.style.backgroundImage = `url(${image})`;
     }
 
-    const t1 = document.getElementById("titleText");
-    const t2 = document.getElementById("titleText2");
-    const track = document.getElementById("title-track");
-
-    t1.innerText = title;
-    t2.innerText = title;
-
-    // restart animation safely
-    track.classList.remove("scroll");
-    void track.offsetWidth;
-    track.classList.add("scroll");
+    document.getElementById("titleText").innerText = title;
 }
 
-/* =========================
-   INIT
-========================= */
+/* INIT */
 async function init() {
     const params = new URLSearchParams(window.location.search);
     const code = params.get("code");
