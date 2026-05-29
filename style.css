@@ -5,9 +5,7 @@ body {
     font-family: Arial, sans-serif;
 }
 
-/* =========================
-   LOGIN SCREEN
-========================= */
+/* Login button */
 .login-screen {
     width: 450px;
     height: 120px;
@@ -24,9 +22,7 @@ body {
     font-weight: bold;
 }
 
-/* =========================
-   MAIN WIDGET
-========================= */
+/* main container */
 .widget {
     position: relative;
     width: 450px;
@@ -46,9 +42,7 @@ body {
     overflow: hidden;
 }
 
-/* =========================
-   BACKGROUND BLUR
-========================= */
+/*  background and blur*/
 .bg {
     position: absolute;
     inset: 0;
@@ -72,9 +66,6 @@ body {
     z-index: 1;
 }
 
-/* =========================
-   ALBUM ART
-========================= */
 #albumArt {
     width: 72px;
     height: 72px;
@@ -84,20 +75,20 @@ body {
     flex-shrink: 0;
 }
 
-/* =========================
-   INFO CONTAINER
-========================= */
+/* Info container so i dont escape */
 .info {
     display: flex;
     flex-direction: column;
 
-    justify-content: flex-end;
-    gap: 2;
+    justify-content: flex-end; /* 🔥 pins text to bottom */
+
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    overflow: hidden;
 }
 
-/* =========================
-   TITLE AREA
-========================= */
+/* Title name area padding and overflow*/
 .text-scroll {
     width: 100%;
     overflow: hidden;
@@ -109,9 +100,8 @@ body {
     min-width: 0;
 }
 
-/* =========================
-   TITLE TEXT (FIXED CLAMP)
-========================= */
+/* 
+   Tilte of song should be fixed to bottom of widget? */
 .text-track span {
     display: -webkit-box;
 
@@ -139,23 +129,20 @@ body {
     max-width: 100%;
 }
 
-/* =========================
-   ARTIST TEXT
-========================= */
+/* artist info */
 #artist {
     font-size: 18px;
     opacity: 0.75;
 
+    margin-top: 2px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-
-    margin-top: 4px;
 }
 
-/* =========================
-   OPTIONAL FADE ANIMATION
-========================= */
+/*=
+   fade in next song it works idk lmao
+ */
 @keyframes fadeIn {
     from {
         opacity: 0;
