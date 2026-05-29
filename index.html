@@ -6,10 +6,12 @@
 
 <body>
 
+<!-- LOGIN SCREEN -->
 <div class="login-screen" id="loginScreen">
     <button onclick="login()">Login with Spotify</button>
 </div>
 
+<!-- WIDGET -->
 <div class="widget" id="widget" style="display:none;">
 
     <div class="bg" id="bg"></div>
@@ -19,8 +21,9 @@
     <div class="info">
 
         <div class="text-scroll">
-            <div class="text-track" id="title-track">
-                <span id="title">Not Playing</span>
+            <div class="text-track scroll" id="title-track">
+                <span id="titleText">Not Playing</span>
+                <span id="titleText2"></span>
             </div>
         </div>
 
@@ -31,6 +34,5 @@
 </div>
 
 <script src="script.js"></script>
-
 </body>
 </html>

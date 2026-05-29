@@ -8,17 +8,12 @@ const SCOPES = [
 
 let accessToken = localStorage.getItem("spotify_token");
 
-/* =========================
-   INIT
-========================= */
 init();
 
 /* =========================
    LOGIN
 ========================= */
 function login() {
-    console.log("LOGIN CLICKED");
-
     const verifier = generateRandomString(128);
 
     generateCodeChallenge(verifier).then(challenge => {
@@ -33,10 +28,8 @@ function login() {
             code_challenge: challenge
         });
 
-        const url = "https://accounts.spotify.com/authorize?" + args;
-        console.log("Redirecting:", url);
-
-        window.location.href = url;
+        window.location.href =
+            "https://accounts.spotify.com/authorize?" + args;
     });
 }
 
@@ -63,7 +56,7 @@ async function generateCodeChallenge(verifier) {
 }
 
 /* =========================
-   TOKEN EXCHANGE
+   TOKEN
 ========================= */
 async function getToken(code) {
     const verifier = localStorage.getItem("verifier");
@@ -85,7 +78,7 @@ async function getToken(code) {
     const data = await res.json();
 
     if (!data.access_token) {
-        console.error("Token error:", data);
+        console.error("Token error", data);
         return;
     }
 
@@ -124,48 +117,37 @@ async function updateTrack() {
 }
 
 /* =========================
-   UI UPDATE
+   UI UPDATE (SCROLL FIXED)
 ========================= */
 function setTrack(title, artist, image) {
     document.getElementById("widget").style.display = "flex";
     document.getElementById("loginScreen").style.display = "none";
 
-    const trackEl = document.getElementById("title-track");
-    const artistEl = document.getElementById("artist");
-    const albumArt = document.getElementById("albumArt");
+    document.getElementById("artist").innerText = artist;
+
+    const album = document.getElementById("albumArt");
     const bg = document.getElementById("bg");
 
-    trackEl.innerHTML = `<span id="titleText">${title}</span>`;
-    artistEl.innerText = artist;
-
     if (image) {
-        albumArt.src = image;
+        album.src = image;
         bg.style.backgroundImage = `url(${image})`;
     }
 
-    requestAnimationFrame(fitText);
+    const t1 = document.getElementById("titleText");
+    const t2 = document.getElementById("titleText2");
+    const track = document.getElementById("title-track");
+
+    t1.innerText = title;
+    t2.innerText = title;
+
+    // restart animation safely
+    track.classList.remove("scroll");
+    void track.offsetWidth;
+    track.classList.add("scroll");
 }
 
 /* =========================
-   AUTO FIT TEXT
-========================= */
-function fitText() {
-    const el = document.getElementById("titleText");
-    const container = document.getElementById("title-track");
-
-    if (!el || !container) return;
-
-    let size = 28;
-    el.style.fontSize = size + "px";
-
-    while (el.scrollWidth > container.offsetWidth && size > 10) {
-        size--;
-        el.style.fontSize = size + "px";
-    }
-}
-
-/* =========================
-   INIT FLOW (IMPORTANT FIX)
+   INIT
 ========================= */
 async function init() {
     const params = new URLSearchParams(window.location.search);
