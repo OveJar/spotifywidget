@@ -9,10 +9,11 @@ const SCOPES = [
 let accessToken = localStorage.getItem("spotify_token");
 
 /* =========================
-   LOGIN (PKCE)
+   LOGIN BUTTON FLOW
 ========================= */
 function login() {
     const verifier = generateRandomString(128);
+
     generateCodeChallenge(verifier).then(challenge => {
         localStorage.setItem("verifier", verifier);
 
@@ -29,15 +30,9 @@ function login() {
     });
 }
 
-async function generateCodeChallenge(verifier) {
-    const data = new TextEncoder().encode(verifier);
-    const digest = await crypto.subtle.digest("SHA-256", data);
-    return btoa(String.fromCharCode(...new Uint8Array(digest)))
-        .replace(/\+/g, '-')
-        .replace(/\//g, '_')
-        .replace(/=+$/, '');
-}
-
+/* =========================
+   PKCE HELPERS
+========================= */
 function generateRandomString(length) {
     let text = '';
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -47,8 +42,18 @@ function generateRandomString(length) {
     return text;
 }
 
+async function generateCodeChallenge(verifier) {
+    const data = new TextEncoder().encode(verifier);
+    const digest = await crypto.subtle.digest("SHA-256", data);
+
+    return btoa(String.fromCharCode(...new Uint8Array(digest)))
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=+$/, '');
+}
+
 /* =========================
-   GET TOKEN
+   TOKEN EXCHANGE
 ========================= */
 async function getToken(code) {
     const verifier = localStorage.getItem("verifier");
@@ -63,12 +68,15 @@ async function getToken(code) {
 
     const res = await fetch("https://accounts.spotify.com/api/token", {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
         body
     });
 
     const data = await res.json();
     accessToken = data.access_token;
+
     localStorage.setItem("spotify_token", accessToken);
 }
 
@@ -78,11 +86,14 @@ async function getToken(code) {
 async function updateTrack() {
     if (!accessToken) return;
 
-    const res = await fetch("https://api.spotify.com/v1/me/player/currently-playing", {
-        headers: {
-            Authorization: "Bearer " + accessToken
+    const res = await fetch(
+        "https://api.spotify.com/v1/me/player/currently-playing",
+        {
+            headers: {
+                Authorization: "Bearer " + accessToken
+            }
         }
-    });
+    );
 
     if (res.status === 204 || res.status > 400) {
         setTrack("Not Playing", "", "");
@@ -103,40 +114,40 @@ async function updateTrack() {
    UI UPDATE
 ========================= */
 function setTrack(title, artist, image) {
+    document.getElementById("widget").style.display = "flex";
+    document.getElementById("loginScreen").style.display = "none";
+
     const trackEl = document.getElementById("title-track");
     const artistEl = document.getElementById("artist");
-    const albumArtEl = document.getElementById("albumArt");
+    const albumArt = document.getElementById("albumArt");
     const bg = document.getElementById("bg");
 
     trackEl.innerHTML = `<span id="titleText">${title}</span>`;
     artistEl.innerText = artist;
 
     if (image) {
-        albumArtEl.src = image;
+        albumArt.src = image;
         bg.style.backgroundImage = `url(${image})`;
-    } else {
-        albumArtEl.src = "";
-        bg.style.backgroundImage = "none";
     }
 
-    requestAnimationFrame(applyFit);
+    requestAnimationFrame(fitText);
 }
 
 /* =========================
-   YOUR ORIGINAL TEXT FIT LOGIC (FIXED)
+   AUTO FIT TEXT
 ========================= */
-function applyFit() {
+function fitText() {
     const el = document.getElementById("titleText");
     const container = document.getElementById("title-track");
 
     if (!el || !container) return;
 
-    let fontSize = 28;
-    el.style.fontSize = fontSize + "px";
+    let size = 28;
+    el.style.fontSize = size + "px";
 
-    while (el.scrollWidth > container.offsetWidth && fontSize > 10) {
-        fontSize--;
-        el.style.fontSize = fontSize + "px";
+    while (el.scrollWidth > container.offsetWidth && size > 10) {
+        size--;
+        el.style.fontSize = size + "px";
     }
 }
 
@@ -153,9 +164,12 @@ async function init() {
     }
 
     if (!accessToken) {
-        login();
+        document.getElementById("loginScreen").style.display = "flex";
         return;
     }
+
+    document.getElementById("loginScreen").style.display = "none";
+    document.getElementById("widget").style.display = "flex";
 
     updateTrack();
     setInterval(updateTrack, 3000);
