@@ -105,8 +105,7 @@ body {
 /* IMPORTANT: prevents phantom box rendering */
 .text-track {
     display: inline-block;
-    white-space: nowrap;
-    width: max-content;
+    width: 100%;
 }
 
 /* =========================
