@@ -109,18 +109,23 @@ body {
     font-weight: 700;
 
     color: #ffffff;
-  
-        
+
+    text-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.8),
+        0 1px 3px rgba(0, 0, 0, 0.6);
+
     line-height: 1.4;
 
-    white-space: normal;
-    overflow-wrap: break-word;
-    word-break: break-word;
-
-    -webkit-line-clamp: 2;
+    /* REQUIRED FOR CLAMP */
     -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
 
     overflow: hidden;
+
+    /* IMPORTANT RESET (prevents weird wrapping bugs) */
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
 
     max-width: 100%;
 }
