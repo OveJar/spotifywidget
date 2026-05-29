@@ -30,6 +30,7 @@ body {
 .widget {
     position: relative;
     width: 450px;
+    height: 100px;
     display: flex;
     align-items: flex-start;
     padding: 12px;
@@ -88,11 +89,9 @@ body {
 .info {
     display: flex;
     flex-direction: column;
-    justify-content: center;
 
-    flex: 1;
-    min-width: 0;
-    overflow: hidden;
+    justify-content: flex-end;
+    gap: 2;
 }
 
 /* =========================
